@@ -1,0 +1,36 @@
+<%- contentFor('top') %>
+<div class="row my-extra-padding">
+  <div class="col-sm-4">
+
+  </div>
+
+  <div class="col-sm-4">
+    <div id="messageDiv"></div>
+  </div>
+
+  <div class="col-sm-4">
+    
+  </div>
+</div>
+
+<%- contentFor('middle') %>
+<table class="table table-bordered table-striped" id="usersTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (item of items) { %>
+    <tr>
+      <td><%= item.Name %></td>
+      <td><%= item.Email %></td>
+      <td><%= item.State %></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<script src="js/events-users.js" type="text/javascript"></script>
