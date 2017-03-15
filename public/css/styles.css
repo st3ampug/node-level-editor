@@ -16,7 +16,7 @@ tr[selected='selected'] {
 }
 
 #navbarLinks, #container{
-    visibility: hidden;
+    visibility: visible;
 }
 
 #loginSpinner {

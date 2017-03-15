@@ -6,6 +6,8 @@ var express = require('express');
 var path    = require('path');
 var request = require('request');
 var async   = require('async');
+var fs = require('fs');
+
 var MyGlobals = require('./globals.js');
 
 
@@ -16,7 +18,13 @@ var router = express.Router();
 module.exports = router;
 
 router.get('/', function(req, res) {
-  res.render('pages/login');
+  fs.readFile('public/game-files/levels/Level1.json', 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    console.log(data);
+    res.render('pages/test', {level: JSON.parse(data)});
+  });
 });
 
 // route for our home page
@@ -91,4 +99,16 @@ function currentDate() {
     var now = new Date();
     //dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
     return dateFormat(now, "yyyy-mm-dd");
+}
+
+function readFile() {
+  var mydata;
+  fs.readFile('public/game-files/levels/Level1.json', 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    console.log(data);
+    mydata = data;
+  });
+  console.log(mydata);
 }

@@ -35,9 +35,7 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownUsersButton" id="dropdownUsersList">
-        <% for (item of users) { %>
-          <li <% if (item.State == 'disabled') { %> class="disabled" <% } %> ><a href="#"><%= item.Name %></a></li>
-        <% } %>
+        
       </ul>
     </div>
   </div>
@@ -64,12 +62,12 @@
     <tr>
       <td id="boxtype"><%= tile.box_type %></td>
       <td id="value"><%= tile.value %></td>
-      <td id="initcoords">Row: <%= init_coords.row %>, Column: <%= init_coords.column %></td>
-      <td id="finalcoords">Row: <%= final_coords.row %>, Column: <%= final_coords.column %></td>
+      <td id="initcoords">Row: <%= tile.init_coords.row %>, Column: <%= tile.init_coords.column %></td>
+      <td id="finalcoords">Row: <%= tile.final_coords.row %>, Column: <%= tile.final_coords.column %></td>
     </tr>
     <% } %>
   </tbody>
 </table>
 
-<link rel="stylesheet" href="/css/style-home.css">
-<script src="js/events-home.js" type="text/javascript"></script>
+<!-- <link rel="stylesheet" href="/css/style-home.css"> -->
+<script src="js/events-test.js" type="text/javascript"></script>
