@@ -12,15 +12,15 @@
 
 <%- contentFor('top') %>
 <div class="row my-extra-padding">
-  <div class="col-sm-4">
+  <div class="col-md-4">
 
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-md-4">
     
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-md-4">
     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#loadJsonModal" id="loadJson">
       <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Load JSON
     </button>
@@ -32,14 +32,14 @@
 </div>
 <div class="row my-extra-padding">
 
-  <div class="col-sm-4">
+  <div class="col-md-4">
       <label for="version">Version</label>
         <input type="text" class="form-control" id="version" value="1.0"/>
       <label for="build">Build</label>
         <input type="text" class="form-control" id="build" value="1"/>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-md-4">
       <label for="levelId">ID</label>
         <input type="text" class="form-control" id="levelId" value="0"/>
       <label for="levelName">Name</label>
@@ -48,7 +48,7 @@
         <input type="text" class="form-control" id="levelDescription" value="This is level 1"/>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-md-4">
       <label for="levelMap">Map</label>
         <input type="text" class="form-control" id="levelMap" placeholder="desert"/>
       <label for="levelSize">Size</label>
@@ -65,29 +65,29 @@
 -->
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <table class="table table-condensed" id="tilesTable">
+    <table class="table table-condensed" id="containerTable">
     <thead>
       <tr>
-        <th id="headerTile0">Empty</th>
-        <th id="headerTile1">1</th>
-        <th id="headerTile2">2</th>
-        <th id="headerTile3">3</th>
-        <th id="headerTile4">4</th>
-        <th id="headerTile5">5</th>
-        <th id="headerTile6">6</th>
-        <th id="headerTile7">7</th>
-        <th id="headerTile8">8</th>
-        <th id="headerTile9">9</th>
-        <th id="headerTile10">10</th>
-        <th id="headerTile11">11</th>
-        <th id="headerTile12">12</th>
-        <th id="headerTile13">13</th>
-        <th id="headerTile14">14</th>
-        <th id="headerTile15">15</th>
-        <th id="headerTile16">16</th>
-        <th id="headerTile17">17</th>
-        <th id="headerTile18">18</th>
-        <th id="headerTile19">19</th>
+        <th class="text-center" id="headerTile0" selected="no" >Empty</th>
+        <th class="text-center" id="headerTile1" selected="no" >1</th>
+        <th class="text-center" id="headerTile2" selected="no" >2</th>
+        <th class="text-center" id="headerTile3" selected="no" >3</th>
+        <th class="text-center" id="headerTile4" selected="no" >4</th>
+        <th class="text-center" id="headerTile5" selected="no" >5</th>
+        <th class="text-center" id="headerTile6" selected="no" >6</th>
+        <th class="text-center" id="headerTile7" selected="no" >7</th>
+        <th class="text-center" id="headerTile8" selected="no" >8</th>
+        <th class="text-center" id="headerTile9" selected="no" >9</th>
+        <th class="text-center" id="headerTile10" selected="no" >10</th>
+        <th class="text-center" id="headerTile11" selected="no" >11</th>
+        <th class="text-center" id="headerTile12" selected="no" >12</th>
+        <th class="text-center" id="headerTile13" selected="no" >13</th>
+        <th class="text-center" id="headerTile14" selected="no" >14</th>
+        <th class="text-center" id="headerTile15" selected="no" >15</th>
+        <th class="text-center" id="headerTile16" selected="no" >16</th>
+        <th class="text-center" id="headerTile17" selected="no" >17</th>
+        <th class="text-center" id="headerTile18" selected="no" >18</th>
+        <th class="text-center" id="headerTile19" selected="no" >19</th>
       </tr>
     </thead>
     <tbody>
@@ -117,26 +117,80 @@
   </table></div>
 </div>
 <div class="row">
-  <table class="table table-condensed" id="tilesTable">
-    <thead>
-      <tr>
-        <th id="boxtype">box_type</th>
-        <th id="value">value</th>
-        <th id="initcoords">init_coords</th>
-        <th id="finalcoords">final_coords</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (tile of level.tiles) { %>
-      <tr>
-        <td id="boxtype"><%= tile.box_type %></td>
-        <td id="value"><%= tile.value %></td>
-        <td id="initcoords">Row: <%= tile.init_coords.row %>, Column: <%= tile.init_coords.column %></td>
-        <td id="finalcoords">Row: <%= tile.final_coords.row %>, Column: <%= tile.final_coords.column %></td>
-      </tr>
-      <% } %>
-    </tbody>
+  <div class="col-md-6">
+    <h2>Final state</h2>
+    <table class="table table-bordered" id="initTable">
+      <thead>
+      </thead>
+      <tbody>
+        <tr id="initRow0">
+          <td id="init00"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init01"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init02"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init03"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init04"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+        <tr id="initRow1">
+          <td id="init10"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init11"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init12"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init13"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init14"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+        <tr id="initRow2">
+          <td id="init20"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init21"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init22"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init23"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init24"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+        <tr id="initRow3">
+          <td id="init30"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init31"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init32"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init33"><img src="img/tiles/placeholder.png" /></td>
+          <td id="init34"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+      </tbody>
   </table>
+  </div>
+  <div class="col-md-6">
+    <h2>Final state</h2>
+    <table class="table table-bordered" id="finalTable">
+      <thead>
+      </thead>
+      <tbody>
+        <tr id="finalRow0">
+          <td id="final00"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final01"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final02"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final03"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final04"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+        <tr id="finalRow1">
+          <td id="final10"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final11"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final12"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final13"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final14"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+        <tr id="finalRow2">
+          <td id="final20"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final21"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final22"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final23"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final24"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+        <tr id="finalRow3">
+          <td id="final30"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final31"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final32"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final33"><img src="img/tiles/placeholder.png" /></td>
+          <td id="final34"><img src="img/tiles/placeholder.png" /></td>
+        </tr>
+      </tbody>
+  </table>
+  </div>
 </div>
 
 

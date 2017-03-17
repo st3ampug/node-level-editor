@@ -1,5 +1,13 @@
-tr[selected='selected'] {
+th[selected='selected'] {
   background-color: chocolate;
+  border-radius: 7px;
+}
+
+table {
+  text-align: center;
+}
+td .bold {
+  font-style: bold;
 }
 
 .my-float-right {
@@ -21,6 +29,11 @@ tr[selected='selected'] {
 
 #loginSpinner {
     display: none;
+}
+
+table#initTable td, table#finalTable td {
+  height: 75px;
+  vertical-align: middle;
 }
 
 .center-block {
@@ -83,7 +96,7 @@ header .extra-left-margin {
 }  
 
 main {
-  background-image: url(../img/bg-white-icons-l.png);
+  background-image: url(../img/Pug_Sketch.png);
   background-repeat: no-repeat;;
   background-size: auto;
   background-position: left top;
