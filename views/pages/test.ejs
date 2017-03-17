@@ -12,32 +12,47 @@
 
 <%- contentFor('top') %>
 <div class="row my-extra-padding">
-
-  <div class="col-sm-4">
-    <div class="my-float-left" id="buttons">
-      <button type="button" class="btn btn-default" id="assignToUser">
-        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Assign
-      </button>
-      <button type="button" class="btn btn-default" id="returnItems">
-        <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Return
-      </button>
-    </div>
-  </div>
-
   <div class="col-sm-4">
 
   </div>
 
   <div class="col-sm-4">
-    <div class="dropdown my-float-right">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownUsersButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Users
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownUsersButton" id="dropdownUsersList">
-        
-      </ul>
-    </div>
+    
+  </div>
+
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#loadJsonModal" id="loadJson">
+      <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> Load JSON
+    </button>
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#saveJsonModal" id="saveJson">
+      <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save JSON
+    </button>
+    <!-- MODALS MISSING FOR BOTH BUTTONS -->
+  </div>
+</div>
+<div class="row my-extra-padding">
+
+  <div class="col-sm-4">
+      <label for="version">Version</label>
+        <input type="text" class="form-control" id="version" value="1.0"/>
+      <label for="build">Build</label>
+        <input type="text" class="form-control" id="build" value="1"/>
+  </div>
+
+  <div class="col-sm-4">
+      <label for="levelId">ID</label>
+        <input type="text" class="form-control" id="levelId" value="0"/>
+      <label for="levelName">Name</label>
+        <input type="text" class="form-control" id="levelName" placeholder="Level 1"/>
+      <label for="levelDescription">Description</label>
+        <input type="text" class="form-control" id="levelDescription" value="This is level 1"/>
+  </div>
+
+  <div class="col-sm-4">
+      <label for="levelMap">Map</label>
+        <input type="text" class="form-control" id="levelMap" placeholder="desert"/>
+      <label for="levelSize">Size</label>
+        <input type="text" class="form-control" id="levelId" value="4x5" disabled />
   </div>
 
 </div>
@@ -48,26 +63,82 @@
   <h2>Waracle Devices</h2>
 </div>
 -->
-<table class="table table-condensed" id="tilesTable">
-  <thead>
-    <tr>
-      <th id="boxtype">box_type</th>
-      <th id="value">value</th>
-      <th id="initcoords">init_coords</th>
-      <th id="finalcoords">final_coords</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% for (tile of level.tiles) { %>
-    <tr>
-      <td id="boxtype"><%= tile.box_type %></td>
-      <td id="value"><%= tile.value %></td>
-      <td id="initcoords">Row: <%= tile.init_coords.row %>, Column: <%= tile.init_coords.column %></td>
-      <td id="finalcoords">Row: <%= tile.final_coords.row %>, Column: <%= tile.final_coords.column %></td>
-    </tr>
-    <% } %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <table class="table table-condensed" id="tilesTable">
+    <thead>
+      <tr>
+        <th id="headerTile0">Empty</th>
+        <th id="headerTile1">1</th>
+        <th id="headerTile2">2</th>
+        <th id="headerTile3">3</th>
+        <th id="headerTile4">4</th>
+        <th id="headerTile5">5</th>
+        <th id="headerTile6">6</th>
+        <th id="headerTile7">7</th>
+        <th id="headerTile8">8</th>
+        <th id="headerTile9">9</th>
+        <th id="headerTile10">10</th>
+        <th id="headerTile11">11</th>
+        <th id="headerTile12">12</th>
+        <th id="headerTile13">13</th>
+        <th id="headerTile14">14</th>
+        <th id="headerTile15">15</th>
+        <th id="headerTile16">16</th>
+        <th id="headerTile17">17</th>
+        <th id="headerTile18">18</th>
+        <th id="headerTile19">19</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="rowTile0"><img src="img/tiles/cross.png" /></td>
+        <td id="rowTile1"><img src="img/tiles/one.png" /></td>
+        <td id="rowTile2"><img src="img/tiles/two.png" /></td>
+        <td id="rowTile3"><img src="img/tiles/three.png" /></td>
+        <td id="rowTile4"><img src="img/tiles/four.png" /></td>
+        <td id="rowTile5"><img src="img/tiles/five.png" /></td>
+        <td id="rowTile6"><img src="img/tiles/six.png" /></td>
+        <td id="rowTile7"><img src="img/tiles/seven.png" /></td>
+        <td id="rowTile8"><img src="img/tiles/eight.png" /></td>
+        <td id="rowTile9"><img src="img/tiles/nine.png" /></td>
+        <td id="rowTile10"><img src="img/tiles/ten.png" /></td>
+        <td id="rowTile11"><img src="img/tiles/eleven.png" /></td>
+        <td id="rowTile12"><img src="img/tiles/twelve.png" /></td>
+        <td id="rowTile13"><img src="img/tiles/thirteen.png" /></td>
+        <td id="rowTile14"><img src="img/tiles/fourteen.png" /></td>
+        <td id="rowTile15"><img src="img/tiles/fifteen.png" /></td>
+        <td id="rowTile16"><img src="img/tiles/sixteen.png" /></td>
+        <td id="rowTile17"><img src="img/tiles/seventeen.png" /></td>
+        <td id="rowTile18"><img src="img/tiles/eighteen.png" /></td>
+        <td id="rowTile19"><img src="img/tiles/nineteen.png" /></td>
+      </tr>
+    </tbody>
+  </table></div>
+</div>
+<div class="row">
+  <table class="table table-condensed" id="tilesTable">
+    <thead>
+      <tr>
+        <th id="boxtype">box_type</th>
+        <th id="value">value</th>
+        <th id="initcoords">init_coords</th>
+        <th id="finalcoords">final_coords</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (tile of level.tiles) { %>
+      <tr>
+        <td id="boxtype"><%= tile.box_type %></td>
+        <td id="value"><%= tile.value %></td>
+        <td id="initcoords">Row: <%= tile.init_coords.row %>, Column: <%= tile.init_coords.column %></td>
+        <td id="finalcoords">Row: <%= tile.final_coords.row %>, Column: <%= tile.final_coords.column %></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
 
 <!-- <link rel="stylesheet" href="/css/style-home.css"> -->
 <script src="js/events-test.js" type="text/javascript"></script>
