@@ -1,0 +1,156 @@
+// Variables ===========================================================================
+
+const SELECTED = "selected";
+const NOTSELECTED = "no";
+const IMGPATH = "img/tiles/"
+const IMGEXTENSION = ".png";
+const CONTAINERTABLE = "containerTable";
+const INITTABLE = "initTable";
+const FINALTABLE = "finalTable";
+const HEADERTILEPARTIAL = "headerTile";
+const ROWTILEPARTIAL = "rowTile";
+const PLACEHOLDER = "placegholder.png";
+const INITROWPARTIAL = "initRow";
+const INITPARTIAL = "init";
+const FiNALPARTIAL = "final";
+const PICPARTIAL = "Pic";
+
+var containerTable = document.getElementById(CONTAINERTABLE);
+var initTable = document.getElementById(INITTABLE);
+
+var lastSelected = -1;
+var currentSelected = -1;
+var usedTilesInit = [];
+var usedTilesFinal = [];
+
+function TileObj(num) {
+    this.num = num;
+    this.coords = [];
+}
+TileObj.prototype.equalsObj = function(otherTile) {
+    var numEquals = false;
+    var lengthEquals = false;
+    var elemsEqual = true;
+
+    if(otherTile.num.equals(this.num)) {
+        numEquals = true;
+    }
+    if(otherTile.coords.length == this.coords.length) {
+        lengthEquals = true;
+
+        for(var i=0; i < otherTile.length; i++) {
+            for(var j = 0; j < this.coodrs.length; j++) {
+                if(!otherTile.coords[i].equals(this.coords[j])) {
+                    elemsEqual = false;
+                }
+            }
+        }
+    }
+
+    if(numEquals && lengthEquals && elemsEqual)
+        return true;
+    else
+        return false;
+}
+
+// =====================================================================================
+
+// Event Listeners =====================================================================
+
+window.addEventListener('load', function(){
+    console.log("onload");
+
+    containerTable.addEventListener('click', function(ev) {
+        if(ev.target.tagName.toLowerCase() == "img") {
+            var tile = new TileObj(returnTileNumber(ev.target.parentNode.id.toString()));
+
+            // setting selection
+            setCurrentSelected(tile);
+            unSelectLast();
+            selectTh(HEADERTILEPARTIAL + tile.num);
+            setLastSelected(tile);
+        }
+        if(ev.target.tagName.toLowerCase() == "td") {
+            console.log(ev.target.tagName.toLowerCase() + " >> " + ev.target.parentNode.id);
+        }
+        if(ev.target.tagName.toLowerCase() == "tr") {
+            console.log(ev.target.id);
+        }
+
+    });
+
+    initTable.addEventListener('click', function(ev) {
+        var coords = [];
+        if(ev.target.tagName.toLowerCase() == "img") {
+            coords = getCoordsFromId(ev.target.parentNode.id, INITPARTIAL);
+            console.log(coords);
+        }
+        if(ev.target.tagName.toLowerCase() == "td") {
+            coords = getCoordsFromId(ev.target.id, INITPARTIAL);
+            console.log(coords);
+        }
+
+        if(checkTileUsage(usedTilesInit)) {
+
+            // make sure to deal with the issue of: you click on the number that has already been usedTilesFinal
+            // maybe you will need to use some class library, so you can store the coords for the already used numvers
+            // actually you can just have an object describing the number and it's coords, and just use that to push to the array
+            if(coords.length == 2) {
+                var img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
+                img.setAttribute("src", IMGPATH + currentSelected.num + IMGEXTENSION);
+                usedTilesInit.push(currentSelected);
+            }
+        }
+    });
+});
+
+// =====================================================================================
+
+// Helpers =============================================================================
+
+function setLastSelected(obj) {
+    lastSelected = obj;
+}
+function setCurrentSelected(num) {
+    currentSelected = num;
+}
+
+function selectTh(id) {
+    var elem = document.getElementById(id);
+    if(elem.getAttribute(SELECTED) != SELECTED)
+        elem.setAttribute(SELECTED, SELECTED);
+    else
+        elem.setAttribute(SELECTED, NOTSELECTED);
+}
+
+function unSelectLast() {
+    if(lastSelected != -1) {
+        var elem = document.getElementById(HEADERTILEPARTIAL + lastSelected.num);
+        elem.setAttribute(SELECTED, NOTSELECTED);
+    }
+}
+
+function returnTileNumber(id) {
+    var partiallength = ROWTILEPARTIAL.length;
+    var num = id.slice(partiallength);
+    return num;
+}
+
+function getCoordsFromId(id, partial) {
+    var partiallength = partial.length;
+    var coords = [];
+    coords.push(id.slice(partiallength, partiallength + 1));
+    coords.push(id.slice(partiallength + 1, partiallength + 2));
+
+    return coords;
+}
+
+function checkTileUsage(tilearray) {
+    for(var i = 0; i < tilearray.length; i++) {
+        if(tilearray[i].equalsObj(currentSelected))
+            return false;
+    }
+    return true;
+}
+
+// =====================================================================================

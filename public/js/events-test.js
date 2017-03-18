@@ -9,7 +9,7 @@ const INITTABLE = "initTable";
 const FINALTABLE = "finalTable";
 const HEADERTILEPARTIAL = "headerTile";
 const ROWTILEPARTIAL = "rowTile";
-const PLACEHOLDER = "placegholder.png";
+const PLACEHOLDER = "placeholder";
 const INITROWPARTIAL = "initRow";
 const INITPARTIAL = "init";
 const FiNALPARTIAL = "final";
@@ -18,15 +18,18 @@ const PICPARTIAL = "Pic";
 var containerTable = document.getElementById(CONTAINERTABLE);
 var initTable = document.getElementById(INITTABLE);
 
-var lastSelected = -1;
-var currentSelected = -1;
+function TileObj(num, coords) {
+    if (coords === undefined) // parameter was omitted in call
+        coords = [];
+
+    this.num = num;
+    this.coords = coords;
+}
+
+var lastSelected = new TileObj(-1);
+var currentSelected = new TileObj(-1);
 var usedTilesInit = [];
 var usedTilesFinal = [];
-
-var objTemplate = {
-    num: "",
-    coords: []
-}
 
 // =====================================================================================
 
@@ -37,13 +40,13 @@ window.addEventListener('load', function(){
 
     containerTable.addEventListener('click', function(ev) {
         if(ev.target.tagName.toLowerCase() == "img") {
-            var num = returnTileNumber(ev.target.parentNode.id);
+            var tile = new TileObj(returnTileNumber(ev.target.parentNode.id.toString()));
 
             // setting selection
-            setCurrentSelected(num);
+            setCurrentSelected(tile);
             unSelectLast();
-            selectTh(HEADERTILEPARTIAL + num);
-            setLastSelected(num);
+            selectTh(HEADERTILEPARTIAL + tile.num);
+            setLastSelected(tile);
         }
         if(ev.target.tagName.toLowerCase() == "td") {
             console.log(ev.target.tagName.toLowerCase() + " >> " + ev.target.parentNode.id);
@@ -65,15 +68,29 @@ window.addEventListener('load', function(){
             console.log(coords);
         }
 
-        if(checkTileUsage(usedTilesInit)) {
+        if(currentSelected.num != -1) {
+            var elemnum = checkTileUsage(usedTilesInit);
+            if(elemnum == -1) {
+                
+                if(coords.length == 2) {
+                    var img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
+                    img.setAttribute("src", IMGPATH + currentSelected.num + IMGEXTENSION);
+                    usedTilesInit.push(new TileObj(currentSelected.num, coords));
 
-            // make sure to deal with the issue of: you click on the number that has already been usedTilesFinal
-            // maybe you will need to use some class library, so you can store the coords for the already used numvers
-            // actually you can just have an object describing the number and it's coords, and just use that to push to the array
-            if(coords.length == 2) {
-                var img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
-                img.setAttribute("src", IMGPATH + currentSelected + IMGEXTENSION);
-                usedTilesInit.push(currentSelected);
+                    checkAndClearCurrentNumOnTile(usedTilesInit, coords);
+                    console.log(usedTilesInit);
+                }
+            } else {
+                var img = document.getElementById(INITPARTIAL + PICPARTIAL + usedTilesInit[elemnum].coords[0] + usedTilesInit[elemnum].coords[1]);
+                img.setAttribute("src", IMGPATH + PLACEHOLDER + IMGEXTENSION);
+                usedTilesInit.splice(elemnum, 1);
+
+                img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
+                img.setAttribute("src", IMGPATH + currentSelected.num + IMGEXTENSION);
+                usedTilesInit.push(new TileObj(currentSelected.num, coords));
+
+                checkAndClearCurrentNumOnTile(usedTilesInit, coords);
+                console.log(usedTilesInit);
             }
         }
     });
@@ -83,11 +100,51 @@ window.addEventListener('load', function(){
 
 // Helpers =============================================================================
 
-function setLastSelected(num) {
-    lastSelected = num;
+function compareObjects(a1, a2) {
+    var numEquals = false;
+    var lengthEquals = false;
+    var elemsEqual = true;
+
+    if(String(a1.num) == (String(a2.num))) {
+        numEquals = true;
+    }
+    if(a1.coords.length == a2.coords.length) {
+        lengthEquals = true;
+
+        for(var i=0; i < a1.coords.length; i++) {
+            for(var j = 0; j < a2.coords.length; j++) {
+                if(!a1.coords[i].equals(a2.coords[j])) {
+                    elemsEqual = false;
+                }
+            }
+        }
+    }
+
+    if(numEquals && lengthEquals && elemsEqual)
+        return true;
+    else
+        return false;
 }
-function setCurrentSelected(num) {
-    currentSelected = num;
+
+function getUsedPlace(obj, num) {
+    if(obj.num == num) {
+        return true;
+    }
+    return false;
+}
+
+function checkAndClearCurrentNumOnTile(objarray, coords) {
+    for(var i = 0; i < objarray.length; i++) {
+        if(objarray[i].coords.equals(coords))
+            objarray.slice(i, 1);
+    }
+}
+
+function setLastSelected(obj) {
+    lastSelected = obj;
+}
+function setCurrentSelected(obj) {
+    currentSelected = obj;
 }
 
 function selectTh(id) {
@@ -99,8 +156,8 @@ function selectTh(id) {
 }
 
 function unSelectLast() {
-    if(lastSelected != -1) {
-        var elem = document.getElementById(HEADERTILEPARTIAL + lastSelected);
+    if(lastSelected.num != -1) {
+        var elem = document.getElementById(HEADERTILEPARTIAL + lastSelected.num);
         elem.setAttribute(SELECTED, NOTSELECTED);
     }
 }
@@ -120,12 +177,42 @@ function getCoordsFromId(id, partial) {
     return coords;
 }
 
-function checkTileUsage(tilearray, currentSelected) {
+function checkTileUsage(tilearray) {
     for(var i = 0; i < tilearray.length; i++) {
-        if(tilearray[i].equals(currentSelected))
-            return false;
+        //if(tilearray[i].equals(currentSelected))
+        if(getUsedPlace(tilearray[i], currentSelected.num))
+            return i;
     }
+    return -1;
+}
+
+if(Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
     return true;
 }
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
 // =====================================================================================
