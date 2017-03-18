@@ -2,6 +2,8 @@
 
 const SELECTED = "selected";
 const NOTSELECTED = "no";
+const IMGPATH = "img/tiles/"
+const IMGEXTENSION = ".png";
 const CONTAINERTABLE = "containerTable";
 const INITTABLE = "initTable";
 const FINALTABLE = "finalTable";
@@ -11,13 +13,20 @@ const PLACEHOLDER = "placegholder.png";
 const INITROWPARTIAL = "initRow";
 const INITPARTIAL = "init";
 const FiNALPARTIAL = "final";
+const PICPARTIAL = "Pic";
 
 var containerTable = document.getElementById(CONTAINERTABLE);
 var initTable = document.getElementById(INITTABLE);
 
 var lastSelected = -1;
 var currentSelected = -1;
-var usedTiles = [];
+var usedTilesInit = [];
+var usedTilesFinal = [];
+
+var objTemplate = {
+    num: "",
+    coords: []
+}
 
 // =====================================================================================
 
@@ -29,6 +38,8 @@ window.addEventListener('load', function(){
     containerTable.addEventListener('click', function(ev) {
         if(ev.target.tagName.toLowerCase() == "img") {
             var num = returnTileNumber(ev.target.parentNode.id);
+
+            // setting selection
             setCurrentSelected(num);
             unSelectLast();
             selectTh(HEADERTILEPARTIAL + num);
@@ -44,13 +55,26 @@ window.addEventListener('load', function(){
     });
 
     initTable.addEventListener('click', function(ev) {
+        var coords = [];
         if(ev.target.tagName.toLowerCase() == "img") {
-            var coords = getCoordsFromId(ev.target.parentNode.id, INITPARTIAL);
+            coords = getCoordsFromId(ev.target.parentNode.id, INITPARTIAL);
             console.log(coords);
         }
         if(ev.target.tagName.toLowerCase() == "td") {
-            var coords = getCoordsFromId(ev.target.id, INITPARTIAL);
+            coords = getCoordsFromId(ev.target.id, INITPARTIAL);
             console.log(coords);
+        }
+
+        if(checkTileUsage(usedTilesInit)) {
+
+            // make sure to deal with the issue of: you click on the number that has already been usedTilesFinal
+            // maybe you will need to use some class library, so you can store the coords for the already used numvers
+            // actually you can just have an object describing the number and it's coords, and just use that to push to the array
+            if(coords.length == 2) {
+                var img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
+                img.setAttribute("src", IMGPATH + currentSelected + IMGEXTENSION);
+                usedTilesInit.push(currentSelected);
+            }
         }
     });
 });
@@ -94,6 +118,14 @@ function getCoordsFromId(id, partial) {
     coords.push(id.slice(partiallength + 1, partiallength + 2));
 
     return coords;
+}
+
+function checkTileUsage(tilearray, currentSelected) {
+    for(var i = 0; i < tilearray.length; i++) {
+        if(tilearray[i].equals(currentSelected))
+            return false;
+    }
+    return true;
 }
 
 // =====================================================================================
