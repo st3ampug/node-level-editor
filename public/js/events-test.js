@@ -55,6 +55,7 @@ window.addEventListener('load', function(){
             console.log(ev.target.id);
         }
 
+        console.log("containerTable click");
     });
 
     initTable.addEventListener('click', function(ev) {
@@ -67,32 +68,31 @@ window.addEventListener('load', function(){
             coords = getCoordsFromId(ev.target.id, INITPARTIAL);
             console.log(coords);
         }
+        
 
         if(currentSelected.num != -1) {
             var elemnum = checkTileUsage(usedTilesInit);
-            if(elemnum == -1) {
-                
-                if(coords.length == 2) {
-                    var img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
-                    img.setAttribute("src", IMGPATH + currentSelected.num + IMGEXTENSION);
+
+            if(coords.length == 2) {
+                checkAndSpliceCurrentNumFromArray(usedTilesInit, coords);
+                changeTdImgSrc(INITPARTIAL + PICPARTIAL, coords, IMGPATH + currentSelected.num + IMGEXTENSION);
+
+                if(elemnum == -1) {
+                    changeTdImgSrc(INITPARTIAL + PICPARTIAL,coords, IMGPATH + currentSelected.num + IMGEXTENSION);
                     usedTilesInit.push(new TileObj(currentSelected.num, coords));
+                } else {
+                    changeTdImgSrc(INITPARTIAL + PICPARTIAL, usedTilesInit[elemnum].coords, IMGPATH + PLACEHOLDER + IMGEXTENSION);
+                    //usedTilesInit = usedTilesInit.slice(elemnum, 1);
+                    spliceTileFromArray(usedTilesInit, elemnum);
 
-                    checkAndClearCurrentNumOnTile(usedTilesInit, coords);
-                    console.log(usedTilesInit);
+                    changeTdImgSrc(INITPARTIAL + PICPARTIAL, coords, IMGPATH + currentSelected.num + IMGEXTENSION)
+                    usedTilesInit.push(new TileObj(currentSelected.num, coords));
                 }
-            } else {
-                var img = document.getElementById(INITPARTIAL + PICPARTIAL + usedTilesInit[elemnum].coords[0] + usedTilesInit[elemnum].coords[1]);
-                img.setAttribute("src", IMGPATH + PLACEHOLDER + IMGEXTENSION);
-                usedTilesInit.splice(elemnum, 1);
-
-                img = document.getElementById(INITPARTIAL + PICPARTIAL + coords[0] + coords[1]);
-                img.setAttribute("src", IMGPATH + currentSelected.num + IMGEXTENSION);
-                usedTilesInit.push(new TileObj(currentSelected.num, coords));
-
-                checkAndClearCurrentNumOnTile(usedTilesInit, coords);
-                console.log(usedTilesInit);
             }
         }
+        console.log(usedTilesInit);
+
+        console.log("initTable click");
     });
 });
 
@@ -126,18 +126,27 @@ function compareObjects(a1, a2) {
         return false;
 }
 
-function getUsedPlace(obj, num) {
-    if(obj.num == num) {
-        return true;
-    }
-    return false;
-}
+// function getUsedPlace(obj, num) {
+//     if(obj.num == num) {
+//         return true;
+//     }
+//     return false;
+// }
 
-function checkAndClearCurrentNumOnTile(objarray, coords) {
+function checkAndSpliceCurrentNumFromArray(objarray, coords) {
     for(var i = 0; i < objarray.length; i++) {
         if(objarray[i].coords.equals(coords))
-            objarray.slice(i, 1);
+            objarray.splice(i, 1);
     }
+}
+
+function changeTdImgSrc(partialid, coords, src) {
+    var img = document.getElementById(partialid + coords[0] + coords[1]);
+    img.setAttribute("src", src);
+}
+
+function spliceTileFromArray(objarray, elemnum) {
+    objarray.splice(elemnum, 1);
 }
 
 function setLastSelected(obj) {
@@ -180,7 +189,8 @@ function getCoordsFromId(id, partial) {
 function checkTileUsage(tilearray) {
     for(var i = 0; i < tilearray.length; i++) {
         //if(tilearray[i].equals(currentSelected))
-        if(getUsedPlace(tilearray[i], currentSelected.num))
+        //if(getUsedPlace(tilearray[i], currentSelected.num))
+        if(tilearray[i].num == currentSelected.num)
             return i;
     }
     return -1;
